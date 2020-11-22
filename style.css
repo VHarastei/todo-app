@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
     user-select: none;
-    transition: 0.5s;
+    
 }
 body {
     background-color: #f5f5f5;
@@ -58,10 +58,21 @@ img {
     align-items: center;
     min-height: 55px;
 }
-.todos li:hover .close {
-    opacity: 1;
-    color:red;
+.todos li .close {
+    margin-left: 25px;
+    opacity: 0;
+    transition: 0.3s ease-out;
 }
+.todos li:hover .close {
+    color:rgb(201, 23, 23);
+    opacity: 0.3;
+    transition: color 0.2s ease-out;
+}
+.todos li .close:hover {
+    opacity: 1;
+    transition: color 0.2s ease-out;
+}
+
 .completed {
     color: #d5d5d5;
     text-decoration: line-through;
@@ -103,7 +114,8 @@ img {
     word-break: break-all;
 
 }
-.close {
-   margin-left: 25px;
-    opacity: 0;
+
+.selected {
+    opacity: 1;
+    box-shadow: -2px 0px 0px 0px seagreen;
 }

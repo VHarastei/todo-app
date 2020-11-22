@@ -1,6 +1,7 @@
 const form = document.getElementById('form');
 let input = document.getElementById('input');
 let todos = document.getElementById('todos');
+let listItems = document.querySelectorAll('list-item');
 let area = null;
 
 form.addEventListener('submit',(e) => {
@@ -9,6 +10,8 @@ form.addEventListener('submit',(e) => {
 
     if(todoText) {
         let todoElem = document.createElement('li');
+        todoElem.classList.add('list-item');
+        todoElem.draggable = 'true';
 
         let elemToggle = document.createElement('div');
         elemToggle.innerText = '✔';
@@ -45,6 +48,31 @@ todos.addEventListener('dblclick', (e) => {
 
     editStart(target);
  });
+
+ todos.addEventListener('dragstart', (e) => {
+    e.target.classList.add('selected');
+ });
+
+ todos.addEventListener('dragend', (e) => {
+    e.target.classList.remove('selected');
+ });
+
+ todos.addEventListener('dragover' , (e) => {
+    e.preventDefault();
+
+    let activeElement = todos.querySelector('.selected');
+    let currentElement = e.target;
+    let isMovable = activeElement !== currentElement &&
+    currentElement.classList.contains('list-item');
+    if(!isMovable) return;
+
+    const nextElement = (currentElement === activeElement.nextElementSibling) ?
+		currentElement.nextElementSibling :
+		currentElement;
+
+    todos.insertBefore(activeElement, nextElement);
+ });
+
 
 function completeTodo(elem) {
     if(!elem ||!elem.classList.contains('toggle') ) return;
