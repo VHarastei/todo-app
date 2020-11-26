@@ -1,8 +1,11 @@
 const form = document.getElementById('form');
 let input = document.getElementById('input');
 let todos = document.getElementById('todos');
-let listItems = document.querySelectorAll('list-item');
+let listItems = document.querySelectorAll('.list-item');
 let area = null;
+let listsNumber = 0;
+let footer = document.createElement('div');
+footer.className = 'footer';
 
 form.addEventListener('submit',(e) => {
     e.preventDefault();
@@ -28,18 +31,40 @@ form.addEventListener('submit',(e) => {
         todoElem.append(elemToggle);
         todoElem.append(elemText);
         todoElem.append(elemClose);
-        todos.appendChild(todoElem); 
+        
+        if(todos.lastChild.className != 'footer') {
+        todos.append(footer);
+        }
+        todos.prepend(todoElem); 
+
+        listsNumber = todos.querySelectorAll('.list-item').length;
+        footer.innerText = listsNumber + ' items left'; 
+
     }
     input.value = '';
 });
 
 todos.addEventListener('click', (e) => {
-
     let elemToggle = e.target.closest('.toggle');
-    if(elemToggle) completeTodo(elemToggle);
+    if(elemToggle) {
+        completeTodo(elemToggle);
+        if(elemToggle.className == 'toggle after') {
+        footer.innerText = --listsNumber + ' items left';
+        }
+        else footer.innerText = ++listsNumber + ' items left';
+    }
     
     let elemClose = e.target.closest('.close');
-    if(elemClose) closeTodo(elemClose); 
+    if(elemClose) {
+        if(elemClose.previousSibling.previousSibling.className 
+        != 'toggle after' && elemClose) {
+            footer.innerText = --listsNumber + ' items left';
+        }
+        closeTodo(elemClose);
+    } 
+
+    listItems = document.querySelectorAll('.list-item');
+    if(listItems.length == 0) footer.remove();
 });
 
 todos.addEventListener('dblclick', (e) => {
@@ -106,7 +131,15 @@ function editStart(elem) {
 function editEnd(elem) {
     elem.innerText = area.value;
     area.replaceWith(elem);
-    if(area.value == '') closeTodo(elem);
+    if(area.value == '') {
+        closeTodo(elem);
+        if(elem.previousSibling.className != 'toggle after')
+        footer.innerText = --listsNumber + ' items left';
+    }
+    
+    listItems = document.querySelectorAll('.list-item');
+    if(listItems.length == 0) footer.remove();
+
 }
 
 function closeTodo(elem) {
