@@ -42,7 +42,6 @@ todos.addEventListener('click', (e) => {
     if(elemClose) {
         localStorage.clear();
         let arrayIndex = elemClose.parentNode.getAttribute('index');
-        console.log(arrayIndex);
         itemsArray.splice(arrayIndex, 1);
         localStorage.setItem('items', JSON.stringify(itemsArray));
 
@@ -192,7 +191,7 @@ function editEnd(elem) {
         closeTodo(elem);
         footerText.innerText = --listsNumber + ' items';
     }
-    
+
     localStorage.setItem('items', JSON.stringify(itemsArray));
 
     listItems = document.querySelectorAll('.list-item');
